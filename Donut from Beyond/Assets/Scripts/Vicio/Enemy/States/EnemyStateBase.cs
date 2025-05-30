@@ -1,35 +1,33 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityHFSM;
 
 public class EnemyStateBase : State<EnemyState, StateEvent>
 { 
-    /*
+    
     protected readonly Enemy Enemy;
-    protected readonly Animator Animator;
     protected readonly NavMeshAgent Agent;
+    protected readonly Animator Animator;
     protected bool RequestedExit;
     protected float ExitTime;
-    
-    protected readonly Action<State<EnemyState,StateEvent>> OnEnter;
-    protected readonly Action<State<EnemyState,StateEvent>> OnLogic;
-    protected readonly Action<State<EnemyState,StateEvent>> OnExit;
-    protected readonly Action<State<EnemyState,StateEvent>, bool> canExit;
 
-    public EnemyStateBase(bool needsExitTime, Enemy enemy, float exitTime = 0.1f,
-        Action<State<EnemyState, StateEvent>> OnEnter = null, Action<State<EnemyState, StateEvent>> OnLogic = null,
-        Action<State<EnemyState, StateEvent>> OnExit = null, Action<State<EnemyState, StateEvent>, bool> canExit = null)
+    protected readonly Action<State<EnemyState, StateEvent>> onEnter;
+    protected readonly Action<State<EnemyState, StateEvent>> onLogic;
+    protected readonly Action<State<EnemyState,StateEvent>> onExit;
+    protected readonly Func<State<EnemyState,StateEvent>, bool> canExit;
+
+    public EnemyStateBase(bool needExitTime, Enemy enemy, float exitTime = 0.1f,
+        Action<State<EnemyState, StateEvent>> onEnter = null, Action<State<EnemyState, StateEvent>> onLogic = null,
+        Action<State<EnemyState, StateEvent>> onExit = null, Func<State<EnemyState, StateEvent>, bool> canExit = null)
     {
-        this.Enemy = Enemy;
-        this.OnEnter = OnEnter;
-        this.OnLogic = OnLogic;
-        this.OnExit = OnExit;
+        this.Enemy = enemy;
+        this.onEnter = onEnter;
+        this.onLogic = onLogic;
+        this.onExit = onExit;
         this.canExit = canExit;
         this.ExitTime = exitTime;
-        this.needsExitTime = needsExitTime;
+        this.needsExitTime = needExitTime;
         Agent = Enemy.GetComponent<NavMeshAgent>();
         Animator = Enemy.GetComponent<Animator>();
     }
@@ -38,7 +36,7 @@ public class EnemyStateBase : State<EnemyState, StateEvent>
     {
         base.OnEnter();
         RequestedExit = false;
-        OnEnter?.Invoke(this);
+        onEnter?.Invoke(this);
     }
 
     public override void OnLogic()
@@ -62,5 +60,4 @@ public class EnemyStateBase : State<EnemyState, StateEvent>
         }
     }
     
-    */
 }
