@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private PlayerSensor followPlayerSensor;
     [SerializeField] private PlayerSensor meleePlayerSensor;
 
-    [SerializeField] private float attackCooldown = 1f;
+    [SerializeField] [Range(0.1f,5f)] private float attackCooldown = 2f;
     
     [SerializeField] private bool isInChaseRange;
     [SerializeField] private bool isInMeleeRange;

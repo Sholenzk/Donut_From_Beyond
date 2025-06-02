@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class ChaseState : EnemyStateBase
 {
     
@@ -14,7 +16,7 @@ public class ChaseState : EnemyStateBase
         base.OnEnter();
         Agent.enabled = false;
         Agent.isStopped = false;
-        Animator.Play("Idle");
+        Animator.Play("Chase");
     }
 
     public override void OnLogic()
