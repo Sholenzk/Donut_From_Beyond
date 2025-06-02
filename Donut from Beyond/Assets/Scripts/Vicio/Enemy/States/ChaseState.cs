@@ -14,7 +14,7 @@ public class ChaseState : EnemyStateBase
     public override void OnEnter()
     {
         base.OnEnter();
-        Agent.enabled = false;
+        Agent.enabled = true;
         Agent.isStopped = false;
         Animator.Play("Chase");
     }

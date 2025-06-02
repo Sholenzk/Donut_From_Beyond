@@ -13,15 +13,15 @@ public class PlayerSensor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent(out Player_Movement player))
+        if(other.TryGetComponent(out PlayerController player))
         {
             OnPlayerEnter?.Invoke(player.transform);
         }
     }
 
-    private void OnTriggerExtir(Collider other)
+    private void OnTriggerExit(Collider other)
     {
-        if(other.TryGetComponent(out Player_Movement player))
+        if(other.TryGetComponent(out PlayerController player))
         {
             OnPlayerExit?.Invoke(player.transform.position);
         }
