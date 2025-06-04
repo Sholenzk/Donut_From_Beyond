@@ -6,42 +6,74 @@ using UnityEngine;
 public class PlayerMovement : IPlayerMovement
 {
     private readonly Transform _playerTransform;
+    private readonly CharacterController _controller;
     private readonly float _speed;
     private readonly float _rotationSpeed;
     private readonly float _hoverHeight; //altura constante pa que siempre flote el monitor
+    private readonly float _heightAdjustSmoothness = 5f;
 
-    public PlayerMovement(Transform playerTransform, float speed, float rotationSpeed, float hoverHeight)
+    public PlayerMovement(Transform playerTransform, CharacterController controller, float speed, float rotationSpeed, float hoverHeight)
     {
         _playerTransform = playerTransform;
+        _controller = controller;
         _speed = speed;
         _rotationSpeed = rotationSpeed;
         _hoverHeight = hoverHeight;
     }
 
-    public void Move(Vector2 direction)
+    public void Move(Vector2 inputDirection)
     {
         //Convierte el input 2D a direccion en 3D
-        Vector3 moveDir = new Vector3(direction.x, 0, direction.y);
-        moveDir = _playerTransform.TransformDirection(moveDir);
+        Vector3 moveDir = new Vector3(inputDirection.x, 0, inputDirection.y);
+        moveDir = _playerTransform.TransformDirection(moveDir); // respeta rotacion
 
-        //calcula la nueva posicion
-        Vector3 newPosition = _playerTransform.position + moveDir * _speed * Time.deltaTime;
-        newPosition.y = _hoverHeight; // mantener altura fija
+        // Aplica movimiento con velocidad
+        Vector3 velocity = moveDir * _speed;
 
-        _playerTransform.position = newPosition;
+        // Mide el suelo con raycast
+        if (Physics.Raycast(_playerTransform.position, Vector3.down, out RaycastHit hit, 10f))
+        {
+            float targetY = hit.point.y + _hoverHeight;
+            float currentY = _playerTransform.position.y;
+            float smoothY = Mathf.Lerp(currentY, targetY, Time.deltaTime * _heightAdjustSmoothness);
+
+            // Corrige Y suavemente
+            velocity.y = (smoothY - currentY) / Time.deltaTime;
+        }
+
+        // Mueve al personaje
+        _controller.Move(velocity * Time.deltaTime);
     }
 
     public void Look(Vector2 lookDirection)
     {
         if (lookDirection.sqrMagnitude < 0.01f) return; // No hace nada si el input es casi cero
 
-        Vector3 dir = new Vector3(lookDirection.x, 0, lookDirection.y); // Convertir input a direccion en el mundo
-        Quaternion targetRotation = Quaternion.LookRotation(dir); // Crear la rotacion hacia esa direccion
+        // Obtiene la rotacion de la camera
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
 
-        // aplica rotacion
-        _playerTransform.rotation = Quaternion.Slerp(_playerTransform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-        // la funcion slerp suaviza el paso entre 2 rotaciones, funciona mejor que lerp ya que a veces no es preciso con rotaciones
-        // y respeta el tiempo de time.deltaTime para que sea progresiva em cada frame OwO
+        // Aplana la rotacion al plano horizontal, quita la inclinacion vertical de la camara
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        // Calcula la direccion deseada en relacion a la camara
+        Vector3 desiredDirection = (cameraForward * lookDirection.y + cameraRight * lookDirection.x).normalized;
+
+        // Aplica rotacion suave hacia esa direccion
+        if (desiredDirection != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(desiredDirection);
+            _playerTransform.rotation = Quaternion.Slerp(
+                _playerTransform.rotation,
+                targetRotation,
+                _rotationSpeed * Time.deltaTime
+            );
+        }
     }
+
+
 }
 
