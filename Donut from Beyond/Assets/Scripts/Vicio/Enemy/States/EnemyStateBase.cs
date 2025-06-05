@@ -10,6 +10,7 @@ public class EnemyStateBase : State<EnemyState, StateEvent>
     protected readonly NavMeshAgent Agent;
     protected readonly Animator Animator;
     protected bool RequestedExit;
+    protected bool neededExitTimeFixed;
     protected float ExitTime;
 
     protected readonly Action<State<EnemyState, StateEvent>> onEnter;
@@ -27,7 +28,8 @@ public class EnemyStateBase : State<EnemyState, StateEvent>
         this.onExit = onExit;
         this.canExit = canExit;
         this.ExitTime = exitTime;
-        this.needsExitTime = needExitTime;
+        //this.needsExitTime = needExitTime;
+        neededExitTimeFixed = needExitTime;
         Agent = Enemy.GetComponent<NavMeshAgent>();
         Animator = Enemy.GetComponent<Animator>();
     }
@@ -50,7 +52,7 @@ public class EnemyStateBase : State<EnemyState, StateEvent>
 
     public override void OnExitRequest()
     {
-        if (!needsExitTime || canExit != null && canExit(this))
+        if (!neededExitTimeFixed || canExit != null && canExit(this))
         {
             fsm.StateCanExit();
         }
