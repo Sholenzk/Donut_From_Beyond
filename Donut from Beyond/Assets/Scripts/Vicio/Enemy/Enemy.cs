@@ -77,7 +77,7 @@ public class Enemy : MonoBehaviour
         Debug.Log("Starting attack");
         isInMeleeRange = true;
     }
-
+/*
     public void Attack()
     {
         Debug.Log("Ola k ase atacando o k ase");
@@ -87,7 +87,7 @@ public class Enemy : MonoBehaviour
     {
         Debug.Log("Deje de atacar");
     }
-    
+   */ 
     void OnAttack(State<EnemyState, StateEvent> state)
     {
         transform.LookAt(player.transform.position);
