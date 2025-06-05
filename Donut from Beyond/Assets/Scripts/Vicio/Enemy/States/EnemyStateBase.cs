@@ -27,7 +27,7 @@ public class EnemyStateBase : State<EnemyState, StateEvent>
         this.onExit = onExit;
         this.canExit = canExit;
         this.ExitTime = exitTime;
-        //this.needsExitTime = needExitTime;
+        this.needsExitTime = needExitTime;
         Agent = Enemy.GetComponent<NavMeshAgent>();
         Animator = Enemy.GetComponent<Animator>();
     }
