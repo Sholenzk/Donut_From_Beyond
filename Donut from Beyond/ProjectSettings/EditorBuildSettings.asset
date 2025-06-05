@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/End.unity
     guid: 21f2493092795a74d94499715557a055
+  - enabled: 1
+    path: Assets/Scenes/Moriste.unity
+    guid: aaf93ffdee9243849b3ee014f9c73ac3
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 723654821ceb8524e9fad18abaf4e631,
       type: 3}

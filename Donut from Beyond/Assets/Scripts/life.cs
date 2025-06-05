@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class life : MonoBehaviour
 {
     public int maxLife;
@@ -33,6 +33,15 @@ public class life : MonoBehaviour
         }
         
     }
+
+    public void Die()
+    {
+        if (currentLife == 0)
+        {
+            SceneManager.LoadScene("Moriste");
+        }
+    }
+    
     
     
 }
