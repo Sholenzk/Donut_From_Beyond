@@ -11,6 +11,6 @@ public class AttackState : EnemyStateBase
     {
         Agent.isStopped = true;
         base.OnEnter();
-        Animator.Play("Atack");
+        Animator.Play("Attack");
     }
 }
